@@ -1,5 +1,4 @@
-﻿using ECommerce.Application.Abstractions;
-using Microsoft.AspNetCore.Http;
+﻿using ECommerce.Application.RepositoryAbstractions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.API.Controllers
@@ -8,17 +7,19 @@ namespace ECommerce.API.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly IProductService _productService;
+        private readonly IProductReadRepository _productReadRepository;
+        private readonly IProductWriteRepository _productWriteRepository;
 
-        public ProductsController(IProductService productService)
+        public ProductsController(IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository)
         {
-            _productService = productService;
+            _productWriteRepository = productWriteRepository;
+            _productReadRepository = productReadRepository;
         }
 
         [HttpGet]
         public IActionResult GetProducts()
         {
-            return Ok(_productService.GetProducts());
+            return Ok();
         }
     }
 }
