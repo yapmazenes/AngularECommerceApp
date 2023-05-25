@@ -1,5 +1,4 @@
-﻿using ECommerce.Domain.Entities.Common;
-using Microsoft.EntityFrameworkCore;
+﻿using ECommerce.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Application.RepositoryAbstractions
 {
-    public interface IRepository<T> where T : BaseEntity
+    public interface IProductWriteRepository : IWriteRepository<Product>
     {
-        DbSet<T> Table { get; }
     }
 }
