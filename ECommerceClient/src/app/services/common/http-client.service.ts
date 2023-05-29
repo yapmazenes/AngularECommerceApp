@@ -14,13 +14,21 @@ export class HttpClientService {
     ${requestParameters.controller}${requestParameters.action ? `${requestParameters.action}` : ''}`;
   }
 
+  private getQueryString(queryString?: string): string {
+    return queryString ? queryString : '';
+  }
+
+  private getIdParameter(id?: string): string {
+    return id ? `/${id}` : '';
+  }
+
   get<T>(requestParameters: Partial<RequestParameters>, id?: string): Observable<T> {
     let url: string = "";
 
     if (requestParameters.customEndPoint)
       url = requestParameters.customEndPoint;
     else
-      url = `${this.url(requestParameters)}${id ? `/${id}` : ''}`;
+      url = `${this.url(requestParameters)}${this.getIdParameter(id)}${this.getQueryString(requestParameters.queryString)}`;
 
     return this.httpClient.get<T>(url, { headers: requestParameters.headers });
   }
@@ -32,7 +40,7 @@ export class HttpClientService {
     if (requestParameters.customEndPoint)
       url = requestParameters.customEndPoint;
     else
-      url = `${this.url(requestParameters)}`;
+      url = `${this.url(requestParameters)}${this.getQueryString(requestParameters.queryString)}`;
 
     return this.httpClient.post<T>(url, body, { headers: requestParameters.headers });
   }
@@ -43,7 +51,7 @@ export class HttpClientService {
     if (requestParameters.customEndPoint)
       url = requestParameters.customEndPoint;
     else
-      url = `${this.url(requestParameters)}`;
+      url = `${this.url(requestParameters)}${this.getQueryString(requestParameters.queryString)}`;
 
     return this.httpClient.put<T>(url, body, { headers: requestParameters.headers });
   }
@@ -54,7 +62,7 @@ export class HttpClientService {
     if (requestParameters.customEndPoint)
       url = requestParameters.customEndPoint;
     else
-      url = `${this.url(requestParameters)}/${id}`;
+      url = `${this.url(requestParameters)}/${id}${this.getQueryString(requestParameters.queryString)}`;
 
     return this.httpClient.delete<T>(url, { headers: requestParameters.headers });
   }
@@ -64,6 +72,7 @@ export class HttpClientService {
 export class RequestParameters {
   controller?: string;
   action?: string;
+  queryString?: string;
 
   headers?: HttpHeaders;
   baseUrl?: string;
