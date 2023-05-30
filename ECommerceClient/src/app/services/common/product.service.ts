@@ -46,4 +46,11 @@ export class ProductService {
 
     return await promiseValue;
   }
+
+  async delete(id: string) {
+
+    const deleteObservable = this.httpClientService.delete({ controller: "products" }, id);
+
+    await lastValueFrom(deleteObservable);
+  }
 }
