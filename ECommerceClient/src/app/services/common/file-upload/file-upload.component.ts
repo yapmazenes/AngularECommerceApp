@@ -6,6 +6,8 @@ import { CustomToastrService, ToastrMessageType } from '../../ui/custom-toastr.s
 import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { DialogService } from '../dialog.service';
 import { FileUploadDialogComponent, FileUploadDialogState } from 'src/app/dialogs/file-upload-dialog/file-upload-dialog.component';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { SpinnerType } from 'src/app/base/base.component';
 
 @Component({
   selector: 'app-file-upload',
@@ -18,7 +20,8 @@ export class FileUploadComponent {
     private httpClientService: HttpClientService,
     private alertifyService: AlertifyService,
     private customToastrService: CustomToastrService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private spinner: NgxSpinnerService
   ) {
   }
 
@@ -39,7 +42,7 @@ export class FileUploadComponent {
       componentType: FileUploadDialogComponent,
       data: FileUploadDialogState.Yes,
       afterClosed: () => {
-
+        this.spinner.show(SpinnerType.BallAtom);
         this.httpClientService.post({
           controller: this.options.controller,
           action: this.options.action,
@@ -48,6 +51,8 @@ export class FileUploadComponent {
         }, fileData).subscribe(data => {
 
           const message: string = "Dosyalar başarıyla yüklenmiştir.";
+          
+          this.spinner.hide(SpinnerType.BallAtom);
 
           if (this.options.isAdminPage) {
             this.alertifyService.message(message, {
@@ -59,9 +64,13 @@ export class FileUploadComponent {
               messageType: ToastrMessageType.Success
             })
           }
+
         },
           (errorResponse: HttpErrorResponse) => {
+            
             const message: string = "Dosyalar yüklenirken beklenmeyen bir hatayla karşılaşılmıştır.";
+            
+            this.spinner.hide(SpinnerType.BallAtom);
 
             if (this.options.isAdminPage) {
               this.alertifyService.message(message, {
