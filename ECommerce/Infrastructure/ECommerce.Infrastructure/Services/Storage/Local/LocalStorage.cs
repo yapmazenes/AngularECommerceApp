@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace ECommerce.Infrastructure.Services.Storage.Local
 {
-    public class LocalStorage : ILocalStorage
+    public class LocalStorage : Storage, ILocalStorage
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
 
@@ -16,15 +16,10 @@ namespace ECommerce.Infrastructure.Services.Storage.Local
         public async Task DeleteAsync(string path, string fileName)
          => await Task.Run(() => File.Delete($"{path}\\{fileName}"));
 
-        public async Task<IEnumerable<string>> GetFilesAsync(string path)
+        public IEnumerable<string> GetFilesAsync(string path)
         {
-            var files = await Task.Run(() =>
-            {
-                DirectoryInfo directory = new(path);
-                return directory.GetFiles().Select(f => f.Name);
-            });
-
-            return files;
+            DirectoryInfo directory = new(path);
+            return directory.GetFiles().Select(f => f.Name);
         }
 
         public bool HasFile(string path, string fileName)
@@ -56,8 +51,10 @@ namespace ECommerce.Infrastructure.Services.Storage.Local
             List<(string fileName, string path)> datas = new();
             foreach (IFormFile file in files)
             {
-                await CopyFileAsync($"{uploadPath}\\{file.Name}", file);
-                datas.Add((file.Name, $"{path}\\{file.Name}"));
+                string fileNewName = await FileRenameAsync(path, file.Name, HasFile);
+
+                await CopyFileAsync($"{uploadPath}\\{fileNewName}", file);
+                datas.Add((fileNewName, $"{path}\\{fileNewName}"));
             }
 
             return datas;

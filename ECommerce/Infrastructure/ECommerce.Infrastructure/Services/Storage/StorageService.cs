@@ -17,7 +17,7 @@ namespace ECommerce.Infrastructure.Services.Storage
         public async Task DeleteAsync(string pathOrContainerName, string fileName) => await _storage.DeleteAsync(pathOrContainerName, fileName);
 
 
-        public async Task<IEnumerable<string>> GetFilesAsync(string pathOrContainerName) => await _storage.GetFilesAsync(pathOrContainerName);
+        public IEnumerable<string> GetFilesAsync(string pathOrContainerName) => _storage.GetFilesAsync(pathOrContainerName);
 
 
         public bool HasFile(string pathOrContainerName, string fileName) => _storage.HasFile(pathOrContainerName, fileName);

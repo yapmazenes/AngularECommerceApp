@@ -13,7 +13,7 @@ namespace ECommerce.Application.Abstractions.Storage
 
         Task DeleteAsync(string pathOrContainerName, string fileName);
 
-        Task<IEnumerable<string>> GetFilesAsync(string pathOrContainerName);
+        IEnumerable<string> GetFilesAsync(string pathOrContainerName);
 
         bool HasFile(string pathOrContainerName, string fileName);
 
