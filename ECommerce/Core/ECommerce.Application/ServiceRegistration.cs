@@ -9,6 +9,10 @@ namespace ECommerce.Application
         {
             services.AddValidatorsFromAssemblyContaining(typeof(ServiceRegistration));
             //services.AddFluentValidationAutoValidation();
+            services.AddMediatR(configuration =>
+            {
+                configuration.RegisterServicesFromAssemblyContaining(typeof(ServiceRegistration));
+            });
         }
     }
 }
