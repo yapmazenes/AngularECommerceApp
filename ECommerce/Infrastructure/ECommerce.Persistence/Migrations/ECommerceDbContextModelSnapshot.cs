@@ -39,6 +39,40 @@ namespace ECommerce.Persistence.Migrations
                     b.ToTable("Customers");
                 });
 
+            modelBuilder.Entity("ECommerce.Domain.Entities.File", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Storage")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Files");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("File");
+
+                    b.UseTphMappingStrategy();
+                });
+
             modelBuilder.Entity("ECommerce.Domain.Entities.Order", b =>
                 {
                     b.Property<Guid>("Id")
@@ -82,8 +116,8 @@ namespace ECommerce.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<long>("Price")
-                        .HasColumnType("bigint");
+                    b.Property<float>("Price")
+                        .HasColumnType("real");
 
                     b.Property<int>("Stock")
                         .HasColumnType("integer");
@@ -111,6 +145,38 @@ namespace ECommerce.Persistence.Migrations
                     b.ToTable("OrderProduct");
                 });
 
+            modelBuilder.Entity("ProductProductImageFile", b =>
+                {
+                    b.Property<Guid>("ProductImageFilesId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ProductsId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("ProductImageFilesId", "ProductsId");
+
+                    b.HasIndex("ProductsId");
+
+                    b.ToTable("ProductProductImageFile");
+                });
+
+            modelBuilder.Entity("ECommerce.Domain.Entities.InvoiceFile", b =>
+                {
+                    b.HasBaseType("ECommerce.Domain.Entities.File");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric");
+
+                    b.HasDiscriminator().HasValue("InvoiceFile");
+                });
+
+            modelBuilder.Entity("ECommerce.Domain.Entities.ProductImageFile", b =>
+                {
+                    b.HasBaseType("ECommerce.Domain.Entities.File");
+
+                    b.HasDiscriminator().HasValue("ProductImageFile");
+                });
+
             modelBuilder.Entity("ECommerce.Domain.Entities.Order", b =>
                 {
                     b.HasOne("ECommerce.Domain.Entities.Customer", "Customer")
@@ -127,6 +193,21 @@ namespace ECommerce.Persistence.Migrations
                     b.HasOne("ECommerce.Domain.Entities.Order", null)
                         .WithMany()
                         .HasForeignKey("OrdersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ECommerce.Domain.Entities.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ProductProductImageFile", b =>
+                {
+                    b.HasOne("ECommerce.Domain.Entities.ProductImageFile", null)
+                        .WithMany()
+                        .HasForeignKey("ProductImageFilesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
