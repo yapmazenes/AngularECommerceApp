@@ -10,31 +10,28 @@ export class HttpClientService {
   constructor(private httpClient: HttpClient, @Inject("baseUrl") private baseUrl: string) { }
 
   private url(requestParameters: Partial<RequestParameters>): string {
-    return `${requestParameters.baseUrl ? requestParameters.baseUrl : this.baseUrl}/
-    ${requestParameters.controller}${requestParameters.action ? `${requestParameters.action}` : ''}`;
+    return `${requestParameters.baseUrl ? requestParameters.baseUrl : this.baseUrl}/${requestParameters.controller}${requestParameters.action ? `/${requestParameters.action}` : ''}`;
   }
 
   private getQueryString(queryString?: string): string {
-    return queryString ? queryString : '';
-  }
+    return queryString ?`?${queryString}` : '';
+  } 
 
   private getIdParameter(id?: string): string {
     return id ? `/${id}` : '';
   }
-
+  
   get<T>(requestParameters: Partial<RequestParameters>, id?: string): Observable<T> {
     let url: string = "";
-
     if (requestParameters.customEndPoint)
       url = requestParameters.customEndPoint;
-    else
+    else    
       url = `${this.url(requestParameters)}${this.getIdParameter(id)}${this.getQueryString(requestParameters.queryString)}`;
 
     return this.httpClient.get<T>(url, { headers: requestParameters.headers });
   }
 
   post<T>(requestParameters: Partial<RequestParameters>, body: Partial<T>): Observable<T> {
-
     let url: string = "";
 
     if (requestParameters.customEndPoint)

@@ -37,9 +37,8 @@ export class ProductService {
     const observableData = this.httpClientService.get<BasePageModel<ListProduct[]>>(
       {
         controller: "products",
-        queryString: `p=${page}&s=${size}`
+        queryString: `page=${page}&size=${size}`
       });
-
     var promiseValue = lastValueFrom(observableData);
 
     promiseValue.then(d => successCallback())
