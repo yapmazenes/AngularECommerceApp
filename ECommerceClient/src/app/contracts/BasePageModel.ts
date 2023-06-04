@@ -1,4 +1,4 @@
 export class BasePageModel<T> {
-    allDataCount: number;
-    datas: T
+    totalCount: number;
+    products: T
 }
