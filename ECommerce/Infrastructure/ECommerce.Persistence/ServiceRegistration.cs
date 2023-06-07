@@ -1,6 +1,7 @@
 ﻿using ECommerce.Application.RepositoryAbstractions;
 using ECommerce.Application.RepositoryAbstractions.File;
 using ECommerce.Application.RepositoryAbstractions.Invoice;
+using ECommerce.Domain.Entities.Identity;
 using ECommerce.Persistence.Contexts;
 using ECommerce.Persistence.Repositories;
 using ECommerce.Persistence.Repositories.File;
@@ -19,6 +20,16 @@ namespace ECommerce.Persistence
                 options.UseNpgsql(Configuration.ConnectionString);
             });
 
+            services.AddIdentity<AppUser, AppRole>(options =>
+            {
+                options.Password.RequiredLength = 3;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.User.RequireUniqueEmail = true;
+
+            }).AddEntityFrameworkStores<ECommerceDbContext>();
             services.AddScoped<ICustomerReadRepository, CustomerReadRepository>();
             services.AddScoped<ICustomerWriteRepository, CustomerWriteRepository>();
 
@@ -33,7 +44,7 @@ namespace ECommerce.Persistence
 
             services.AddScoped<IProductImageFileReadRepository, ProductImageFileReadRepository>();
             services.AddScoped<IProductImageFileWriteRepository, ProductImageFileWriteRepository>();
-            
+
             services.AddScoped<IInvoiceFileReadRepository, InvoiceFileReadRepository>();
             services.AddScoped<IInvoiceFileWriteRepository, InvoiceFileWriteRepository>();
         }
