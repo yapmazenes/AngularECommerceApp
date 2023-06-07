@@ -1,0 +1,22 @@
+<div class="container">
+    <div class="row">
+
+        <div class=" row">
+            <div class="offset-3 col-3 mb-3">
+                <label for="userName" class="form-label">Username / Email *</label>
+                <input #userNameOrEmail type="text" class="form-control" placeholder="Username / Email"
+                    id="userNameOrEmail">
+            </div>
+        </div>
+        <div class="row">
+            <div class="offset-3 col-3 mb-3">
+                <label for="password" class="form-label">Password *</label>
+                <input #password type="password" class="form-control" placeholder="Password" id="password">
+            </div>
+        </div>
+        <br>
+        <button type="submit" class="offset-3 btn btn-primary"
+            (click)="login(userNameOrEmail.value,password.value)">Login</button>
+
+    </div>
+</div>
