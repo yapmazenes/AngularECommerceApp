@@ -3,6 +3,9 @@ using ECommerce.Infrastructure;
 using ECommerce.Infrastructure.Filters;
 using ECommerce.Infrastructure.Services.Storage.Local;
 using ECommerce.Persistence;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +30,21 @@ builder.Services.AddApplicationServices();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer("Admin", options =>
+                {
+                    options.TokenValidationParameters = new()
+                    {
+                        ValidateAudience = true, //Olusturulacak olan Token degerini kimlerin/hangi originlerin/ sitelerin kullanacagini belirledigimiz degerdir.
+                        ValidateIssuer = true, //Olusturulan Token degerini kimin dagittigini ifade eder
+                        ValidateLifetime = true, //Olusturulan Token degerinin gecerlilik suresini kontrol edecek olan dogrulamadir.
+                        ValidateIssuerSigningKey = true, //Uretilecek olan token degerinin uygulamamiza ait oldugunu ifade eden security key verisinin dogrulamasi
+                        ValidAudience = builder.Configuration["Token:Audience"],
+                        ValidIssuer = builder.Configuration["Token:Issuer"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"]))
+                    };
+                });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -41,6 +59,7 @@ app.UseCors();
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
