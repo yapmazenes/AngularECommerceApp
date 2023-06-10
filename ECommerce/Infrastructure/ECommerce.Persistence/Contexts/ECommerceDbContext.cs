@@ -1,10 +1,12 @@
 ﻿using ECommerce.Domain.Entities;
 using ECommerce.Domain.Entities.Common;
+using ECommerce.Domain.Entities.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace ECommerce.Persistence.Contexts
 {
-    public class ECommerceDbContext : DbContext
+    public class ECommerceDbContext : IdentityDbContext<AppUser, AppRole, Guid>
     {
         public ECommerceDbContext(DbContextOptions options) : base(options)
         {
@@ -28,7 +30,7 @@ namespace ECommerce.Persistence.Contexts
                     EntityState.Added => data.Entity.CreatedDate = DateTime.UtcNow,
                     EntityState.Modified => data.Entity.UpdatedDate = DateTime.UtcNow,
                     _ => DateTime.UtcNow
-                } ;
+                };
             }
 
             return await base.SaveChangesAsync(cancellationToken);
