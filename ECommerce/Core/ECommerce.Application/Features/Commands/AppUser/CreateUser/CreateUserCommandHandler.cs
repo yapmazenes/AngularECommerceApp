@@ -16,7 +16,7 @@ namespace ECommerce.Application.Features.Commands.AppUser.CreateUser
         {
             var result = await _userManager.CreateAsync(new()
             {
-                Id=Guid.NewGuid(),
+                //Id=Guid.NewGuid(),
                 UserName = request.Username,
                 Email = request.Email,
                 NameSurname = request.NameSurname,

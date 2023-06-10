@@ -22,22 +22,31 @@ namespace ECommerce.Application.Features.Commands.LoginUser
 
         public async Task<LoginUserCommandResponse> Handle(LoginUserCommandRequest request, CancellationToken cancellationToken)
         {
-            var appUser = await _userManager.FindByNameAsync(request.UsernameOrEmail);
-            appUser ??= await _userManager.FindByEmailAsync(request.UsernameOrEmail);
-
-            if (appUser == null) throw new NotFoundUserException();
-
-            var signInResult = await _signInManager.CheckPasswordSignInAsync(appUser, request.Password, false);
-
-            if (signInResult.Succeeded)
+            try
             {
-                return new LoginUserSuccessCommandResponse
-                {
-                    Token = _tokenHandler.CreateAccessToken(30)
-                };
-            }
+                var appUser = await _userManager.FindByNameAsync(request.UsernameOrEmail);
+                appUser ??= await _userManager.FindByEmailAsync(request.UsernameOrEmail);
 
-            throw new AuthenticationErrorException();
+                if (appUser == null) throw new NotFoundUserException();
+
+                var signInResult = await _signInManager.CheckPasswordSignInAsync(appUser, request.Password, false);
+
+                if (signInResult.Succeeded)
+                {
+                    return new LoginUserSuccessCommandResponse
+                    {
+                        Token = _tokenHandler.CreateAccessToken(30)
+                    };
+                }
+
+                throw new AuthenticationErrorException();
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
     }
 }
