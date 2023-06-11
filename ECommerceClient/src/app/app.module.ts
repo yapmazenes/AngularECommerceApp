@@ -8,8 +8,9 @@ import { UiModule } from './ui/ui.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { NgxSpinnerModule } from 'ngx-spinner';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { JwtModule } from '@auth0/angular-jwt';
+import { HttpErrorHandlerInterceptorService } from './services/common/http-error-handler-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,9 @@ import { JwtModule } from '@auth0/angular-jwt';
       }
     })
   ],
-  providers: [{ provide: "baseUrl", useValue: "http://localhost:5174/api", multi: true }],
+  providers: [
+    { provide: "baseUrl", useValue: "http://localhost:5174/api", multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorHandlerInterceptorService, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
