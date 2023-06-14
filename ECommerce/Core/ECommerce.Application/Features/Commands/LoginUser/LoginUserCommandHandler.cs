@@ -1,5 +1,7 @@
 ﻿using ECommerce.Application.Abstractions.Token;
+using ECommerce.Application.DTOs;
 using ECommerce.Application.Exceptions;
+using ECommerce.Application.Helpers.Authentication;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
@@ -33,9 +35,13 @@ namespace ECommerce.Application.Features.Commands.LoginUser
 
                 if (signInResult.Succeeded)
                 {
+                    var accessToken = _tokenHandler.CreateAccessToken();
+
+                    await UserHelper.UpdateRefreshToken(_userManager, appUser, accessToken);
+
                     return new LoginUserSuccessCommandResponse
                     {
-                        Token = _tokenHandler.CreateAccessToken(30)
+                        Token = accessToken,
                     };
                 }
 
@@ -48,5 +54,6 @@ namespace ECommerce.Application.Features.Commands.LoginUser
                 throw;
             }
         }
+
     }
 }

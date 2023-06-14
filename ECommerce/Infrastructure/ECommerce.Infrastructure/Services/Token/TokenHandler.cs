@@ -1,12 +1,9 @@
 ﻿using ECommerce.Application.Abstractions.Token;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerce.Infrastructure.Services.Token
 {
@@ -39,7 +36,22 @@ namespace ECommerce.Infrastructure.Services.Token
             var tokenHandler = new JwtSecurityTokenHandler();
             token.AccessToken = tokenHandler.WriteToken(securityToken);
 
+            token.RefreshToken = CreateRefreshToken();
+
             return token;
+        }
+
+        public Application.DTOs.Token CreateAccessToken()
+        {
+            return CreateAccessToken(int.Parse(_configuration["Token:LifetimeMinute"] ?? "30"));
+        }
+
+        public string CreateRefreshToken()
+        {
+            byte[] number = new byte[32];
+            using RandomNumberGenerator randomNumberGenerator = RandomNumberGenerator.Create();
+            randomNumberGenerator.GetBytes(number);
+            return Convert.ToBase64String(number);
         }
     }
 }
