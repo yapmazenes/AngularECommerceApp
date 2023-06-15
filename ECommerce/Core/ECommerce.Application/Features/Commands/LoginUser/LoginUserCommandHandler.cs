@@ -35,7 +35,7 @@ namespace ECommerce.Application.Features.Commands.LoginUser
 
                 if (signInResult.Succeeded)
                 {
-                    var accessToken = _tokenHandler.CreateAccessToken();
+                    var accessToken = _tokenHandler.CreateAccessToken(appUser);
 
                     await UserHelper.UpdateRefreshToken(_userManager, appUser, accessToken);
 

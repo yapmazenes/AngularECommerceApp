@@ -1,7 +1,9 @@
 ﻿using ECommerce.Application.Abstractions.Token;
+using ECommerce.Domain.Entities.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -16,7 +18,7 @@ namespace ECommerce.Infrastructure.Services.Token
             _configuration = configuration;
         }
 
-        public Application.DTOs.Token CreateAccessToken(int expirationMinute)
+        public Application.DTOs.Token CreateAccessToken(int expirationMinute, AppUser appUser)
         {
             var token = new Application.DTOs.Token();
 
@@ -31,7 +33,9 @@ namespace ECommerce.Infrastructure.Services.Token
                                         audience: _configuration["Token:Audience"],
                                         expires: token.Expiration,
                                         notBefore: DateTime.UtcNow, //Token suresi ne zaman devreye girsin
-                                        signingCredentials: signingCredentials);
+                                        signingCredentials: signingCredentials,
+                                        claims: new List<Claim> { new(ClaimTypes.Name, appUser.UserName) }
+                                        );
 
             var tokenHandler = new JwtSecurityTokenHandler();
             token.AccessToken = tokenHandler.WriteToken(securityToken);
@@ -41,9 +45,9 @@ namespace ECommerce.Infrastructure.Services.Token
             return token;
         }
 
-        public Application.DTOs.Token CreateAccessToken()
+        public Application.DTOs.Token CreateAccessToken(AppUser appUser)
         {
-            return CreateAccessToken(int.Parse(_configuration["Token:LifetimeMinute"] ?? "30"));
+            return CreateAccessToken(int.Parse(_configuration["Token:LifetimeMinute"] ?? "30"), appUser);
         }
 
         public string CreateRefreshToken()

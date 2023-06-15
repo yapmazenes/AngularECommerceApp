@@ -24,7 +24,7 @@ namespace ECommerce.Application.Features.Commands.AppUser.RefreshTokenLogin
 
             if (user?.RefreshTokenEndDate > DateTime.UtcNow)
             {
-                var accessToken = _tokenHandler.CreateAccessToken();
+                var accessToken = _tokenHandler.CreateAccessToken(user);
                 await UserHelper.UpdateRefreshToken(_userManager, user, accessToken);
                 return new()
                 {
