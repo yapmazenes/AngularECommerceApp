@@ -2,13 +2,14 @@ import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpStatusCode } 
 import { Injectable } from '@angular/core';
 import { Observable, catchError, of } from 'rxjs';
 import { CustomToastrService, ToastrMessageType, ToastrPosition } from '../ui/custom-toastr.service';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HttpErrorHandlerInterceptorService implements HttpInterceptor {
 
-  constructor(private toastrService: CustomToastrService) { }
+  constructor(private toastrService: CustomToastrService, private userService: UserService) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(catchError(error => {
@@ -18,6 +19,9 @@ export class HttpErrorHandlerInterceptorService implements HttpInterceptor {
           this.toastrService.message("You are not authorized to perform this action.", "Authorization Information", {
             messageType: ToastrMessageType.Warning,
             position: ToastrPosition.TopRight
+          });
+
+          this.userService.refreshTokenLogin(localStorage.getItem("refreshToken")).then(data => {
           });
           break;
         case HttpStatusCode.InternalServerError:
