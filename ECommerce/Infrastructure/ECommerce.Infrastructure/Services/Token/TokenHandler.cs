@@ -1,12 +1,11 @@
 ﻿using ECommerce.Application.Abstractions.Token;
+using ECommerce.Domain.Entities.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
+using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerce.Infrastructure.Services.Token
 {
@@ -19,7 +18,7 @@ namespace ECommerce.Infrastructure.Services.Token
             _configuration = configuration;
         }
 
-        public Application.DTOs.Token CreateAccessToken(int expirationMinute)
+        public Application.DTOs.Token CreateAccessToken(int expirationMinute, AppUser appUser)
         {
             var token = new Application.DTOs.Token();
 
@@ -34,12 +33,29 @@ namespace ECommerce.Infrastructure.Services.Token
                                         audience: _configuration["Token:Audience"],
                                         expires: token.Expiration,
                                         notBefore: DateTime.UtcNow, //Token suresi ne zaman devreye girsin
-                                        signingCredentials: signingCredentials);
+                                        signingCredentials: signingCredentials,
+                                        claims: new List<Claim> { new(ClaimTypes.Name, appUser.UserName) }
+                                        );
 
             var tokenHandler = new JwtSecurityTokenHandler();
             token.AccessToken = tokenHandler.WriteToken(securityToken);
 
+            token.RefreshToken = CreateRefreshToken();
+
             return token;
+        }
+
+        public Application.DTOs.Token CreateAccessToken(AppUser appUser)
+        {
+            return CreateAccessToken(int.Parse(_configuration["Token:LifetimeMinute"] ?? "30"), appUser);
+        }
+
+        public string CreateRefreshToken()
+        {
+            byte[] number = new byte[32];
+            using RandomNumberGenerator randomNumberGenerator = RandomNumberGenerator.Create();
+            randomNumberGenerator.GetBytes(number);
+            return Convert.ToBase64String(number);
         }
     }
 }

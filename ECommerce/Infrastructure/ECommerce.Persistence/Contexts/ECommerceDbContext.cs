@@ -35,5 +35,22 @@ namespace ECommerce.Persistence.Contexts
 
             return await base.SaveChangesAsync(cancellationToken);
         }
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+
+            builder.Entity<AppUser>(x =>
+                x.Property(p => p.Id)
+                    .HasColumnType("uuid")
+                    .HasDefaultValueSql("uuid_generate_v4()"));
+            
+            builder.Entity<AppRole>(x =>
+                x.Property(p => p.Id)
+                    .HasColumnType("uuid")
+                    .HasDefaultValueSql("uuid_generate_v4()"));
+
+
+
+            base.OnModelCreating(builder);
+        }
     }
 }
