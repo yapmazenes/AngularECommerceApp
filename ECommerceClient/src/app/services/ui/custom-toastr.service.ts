@@ -29,12 +29,12 @@ export enum ToastrMessageType {
 }
 
 export enum ToastrPosition {
-  TopRight = "toastr-top-right",
-  BottomRight = "toastr-bottom-right",
-  BottomLeft = "toastr-bottom-left",
-  TopLeft = "toastr-top-left",
-  TopFullWidth = "toastr-top-full-width",
-  BottomFullWidth = "toastr-bottom-full-width",
-  TopCenter = "toastr-top-center",
-  BottomCenter = "toastr-bottom-center",
+  TopRight = "toast-top-right",
+  BottomRight = "toast-bottom-right",
+  BottomLeft = "toast-bottom-left",
+  TopLeft = "toast-top-left",
+  TopFullWidth = "toast-top-full-width",
+  BottomFullWidth = "toast-bottom-full-width",
+  TopCenter = "toast-top-center",
+  BottomCenter = "toast-bottom-center",
 }
