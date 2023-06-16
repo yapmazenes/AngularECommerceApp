@@ -5,6 +5,8 @@ using ECommerce.Infrastructure;
 using ECommerce.Infrastructure.Filters;
 using ECommerce.Infrastructure.Services.Storage.Local;
 using ECommerce.Persistence;
+using ECommerce.Socket;
+using ECommerce.Socket.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.IdentityModel.Tokens;
@@ -21,6 +23,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddPersistenceServices();
 builder.Services.AddInfrastructureServices();
+builder.Services.AddApplicationServices();
+builder.Services.AddSignalRServices();
 builder.Services.AddStorage<LocalStorage>();
 
 builder.Services.AddCors(options =>
@@ -53,7 +57,6 @@ Logger log = new LoggerConfiguration()
 
 builder.Host.UseSerilog();
 
-builder.Services.AddApplicationServices();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -113,5 +116,6 @@ app.Use(async (context, next) =>
 });
 
 app.MapControllers();
+app.MapHubs();
 
 app.Run();
