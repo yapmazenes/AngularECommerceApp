@@ -32,6 +32,7 @@ import { HttpErrorHandlerInterceptorService } from './services/common/http-error
   ],
   providers: [
     { provide: "baseUrl", useValue: "http://localhost:5174/api", multi: true },
+    { provide: "baseHubUrl", useValue: "localhost:5174", multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: HttpErrorHandlerInterceptorService, multi: true }],
   bootstrap: [AppComponent]
 })

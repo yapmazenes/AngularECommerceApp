@@ -28,6 +28,7 @@ export class LoginComponent extends BaseComponent {
         const returnUrl = queryParams["returnUrl"];
         if (returnUrl)
           this.router.navigate([returnUrl]);
+        this.router.navigate([""]);
       });
 
       this.hideSpinner(SpinnerType.BallAtom);
