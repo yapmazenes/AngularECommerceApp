@@ -30,7 +30,7 @@ builder.Services.AddStorage<LocalStorage>();
 builder.Services.AddCors(options =>
     options.AddDefaultPolicy(policy =>
         policy.WithOrigins("http://localhost:4200", "https://localhost:4200").
-    AllowAnyHeader().AllowAnyMethod()));
+    AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
 
 builder.Services.AddControllers(x => x.Filters.Add<ValidationFilter>()).ConfigureApiBehaviorOptions(options =>
 {
@@ -55,7 +55,7 @@ Logger log = new LoggerConfiguration()
     .Enrich.FromLogContext()
     .CreateLogger();
 
-builder.Host.UseSerilog();
+builder.Host.UseSerilog(log);
 
 
 builder.Services.AddEndpointsApiExplorer();
