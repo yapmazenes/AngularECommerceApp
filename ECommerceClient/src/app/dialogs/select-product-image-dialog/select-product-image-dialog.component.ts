@@ -32,6 +32,7 @@ export class SelectProductImageDialogComponent extends BaseDialog<SelectProductI
     this.images = await this.productService.getImages(this.data as string, () => {
       this.spinner.hide(SpinnerType.BallAtom);
     });
+    console.log(this.images);
   }
 
   images: ListProductImage[];
@@ -46,6 +47,14 @@ export class SelectProductImageDialogComponent extends BaseDialog<SelectProductI
           this.spinner.hide(SpinnerType.BallAtom);
         });
       }
+    });
+  }
+
+  changeShowcase(imageId: string) {
+    this.spinner.show(SpinnerType.BallAtom);
+
+    this.productService.changeShowcaseImage(imageId, this.data as string, () => {
+      this.spinner.hide(SpinnerType.BallAtom);
     });
   }
 
