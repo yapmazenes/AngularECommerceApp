@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <Folder Include="Abstractions\Storage\Local\" />
+    <Folder Include="Features\Queries\Basket\" />
   </ItemGroup>
 
 </Project>
