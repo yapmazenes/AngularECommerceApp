@@ -3,25 +3,37 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError, of } from 'rxjs';
 import { CustomToastrService, ToastrMessageType, ToastrPosition } from '../ui/custom-toastr.service';
 import { UserService } from './user.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { SpinnerType } from 'src/app/base/base.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HttpErrorHandlerInterceptorService implements HttpInterceptor {
 
-  constructor(private toastrService: CustomToastrService, private userService: UserService) { }
+  constructor(private toastrService: CustomToastrService, private userService: UserService, private router: Router, private spinner: NgxSpinnerService) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(catchError(error => {
 
       switch (error.status) {
         case HttpStatusCode.Unauthorized:
-          this.toastrService.message("You are not authorized to perform this action.", "Authorization Information", {
-            messageType: ToastrMessageType.Warning,
-            position: ToastrPosition.TopRight
-          });
+          this.userService.refreshTokenLogin(localStorage.getItem("refreshToken"), (state) => {
+            if (!state) {
+              if (this.router.url == "/products")
+                this.toastrService.message("You must be logged in to add products to the basket.", "Login, please", {
+                  messageType: ToastrMessageType.Warning,
+                  position: ToastrPosition.TopRight
+                });
+              else
+                this.toastrService.message("You are not authorized to perform this action.", "Authorization Information", {
+                  messageType: ToastrMessageType.Warning,
+                  position: ToastrPosition.TopRight
+                });
+            }
 
-          this.userService.refreshTokenLogin(localStorage.getItem("refreshToken")).then(data => {
+          }).then(data => {
           });
           break;
         case HttpStatusCode.InternalServerError:
@@ -51,7 +63,7 @@ export class HttpErrorHandlerInterceptorService implements HttpInterceptor {
           break;
 
       }
-
+      this.spinner.hide(SpinnerType.BallAtom);
       return of(error);
     }));
   }
