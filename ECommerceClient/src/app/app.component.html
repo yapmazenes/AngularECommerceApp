@@ -25,7 +25,8 @@
                         <a class="nav-link" routerLink="login" *ngIf="!authService.isAuthenticated">Login</a>
                     </li>
                     <li class="nav-item">
-                        <a class="btn btn-danger" style="margin-right: 5px;" (click)="logout()" *ngIf="authService.isAuthenticated">Logout</a>
+                        <a class="btn btn-danger" style="margin-right: 5px;" (click)="logout()"
+                            *ngIf="authService.isAuthenticated">Logout</a>
                     </li>
                     <li class="nav-item">
                         <a class="btn btn-outline-success" aria-current="page" routerLink="admin"
@@ -56,6 +57,11 @@
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form> -->
+
+                <div class="d-flex">
+                    <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#basketModal"
+                        type="submit" (click)="loadComponent()">Basket</button>
+                </div>
             </div>
         </div>
     </nav>
@@ -66,3 +72,12 @@
 <ngx-spinner size="default" name="s1" type="ball-scale-multiple"></ngx-spinner>
 <ngx-spinner size="default" name="s2" type="ball-atom"></ngx-spinner>
 <ngx-spinner size="default" name="s3" type="ball-spin-clockwise-fade-rotating"></ngx-spinner>
+
+<!-- Modal -->
+<!-- <app-baskets></app-baskets> -->
+<!-- Dynamic Component Loading -->
+<div class="modal fade" id="basketModal" tabindex="-1" aria-labelledby="basketModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <ng-template appDynamicLoadComponent></ng-template>
+    </div>
+</div>

@@ -1,1 +1,41 @@
-<p>baskets works!</p>
+<div class="modal-content">
+    <div class="modal-header">
+        <h1 class="modal-title fs-5" id="basketModalLabel">Your Shopping Basket</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Product</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-id="{{basketItem.basketItemId}}" *ngFor="let basketItem of basketItems; let i=index">
+                    <th scope="row">{{i+1}}</th>
+                    <td>{{basketItem.name}}</td>
+                    <td>{{basketItem.price}}</td>
+                    <td>
+                        <div class="col-2">
+                            <div class="input-group input-group-sm">
+                                <input class="form-control" min="0" type="number" [value]="basketItem.quantity"
+                                    (change)="changeQuantity($event)">
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger" (click)="removeBasketItem($event)">X</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success">Complete Shopping</button>
+    </div>
+</div>
