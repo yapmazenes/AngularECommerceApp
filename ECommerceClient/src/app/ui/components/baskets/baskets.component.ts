@@ -75,4 +75,5 @@ export class BasketsComponent extends BaseComponent implements OnInit {
     });
     this.router.navigate(["/"]);
   }
+
 }
