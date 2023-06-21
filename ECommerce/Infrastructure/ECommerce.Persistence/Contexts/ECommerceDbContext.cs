@@ -18,6 +18,9 @@ namespace ECommerce.Persistence.Contexts
         public DbSet<Domain.Entities.File> Files { get; set; }
         public DbSet<ProductImageFile> ProductImageFiles { get; set; }
         public DbSet<InvoiceFile> InvoiceFiles { get; set; }
+        public DbSet<Basket> Baskets { get; set; }
+        public DbSet<BasketItem> BasketItems { get; set; }
+
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
@@ -42,13 +45,18 @@ namespace ECommerce.Persistence.Contexts
                 x.Property(p => p.Id)
                     .HasColumnType("uuid")
                     .HasDefaultValueSql("uuid_generate_v4()"));
-            
+
             builder.Entity<AppRole>(x =>
                 x.Property(p => p.Id)
                     .HasColumnType("uuid")
                     .HasDefaultValueSql("uuid_generate_v4()"));
 
+            builder.Entity<Order>().HasKey(x => x.Id);
 
+            builder.Entity<Order>()
+                .HasOne(x => x.Basket)
+                .WithOne(x => x.Order)
+                .HasForeignKey<Order>(x => x.BasketId);
 
             base.OnModelCreating(builder);
         }

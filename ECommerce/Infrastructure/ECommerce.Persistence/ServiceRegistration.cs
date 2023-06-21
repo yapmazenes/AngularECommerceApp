@@ -1,4 +1,5 @@
-﻿using ECommerce.Application.RepositoryAbstractions;
+﻿using ECommerce.Application.Abstractions.Services;
+using ECommerce.Application.RepositoryAbstractions;
 using ECommerce.Application.RepositoryAbstractions.File;
 using ECommerce.Application.RepositoryAbstractions.Invoice;
 using ECommerce.Domain.Entities.Identity;
@@ -6,6 +7,7 @@ using ECommerce.Persistence.Contexts;
 using ECommerce.Persistence.Repositories;
 using ECommerce.Persistence.Repositories.File;
 using ECommerce.Persistence.Repositories.InvoiceFile;
+using ECommerce.Persistence.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -47,6 +49,16 @@ namespace ECommerce.Persistence
 
             services.AddScoped<IInvoiceFileReadRepository, InvoiceFileReadRepository>();
             services.AddScoped<IInvoiceFileWriteRepository, InvoiceFileWriteRepository>();
+
+            services.AddScoped<IBasketReadRepository, BasketReadRepository>();
+            services.AddScoped<IBasketWriteRepository, BasketWriteRepository>();
+
+            services.AddScoped<IBasketItemReadRepository, BasketItemReadRepository>();
+            services.AddScoped<IBasketItemWriteRepository, BasketItemWriteRepository>();
+
+            services.AddScoped<IBasketService, BasketService>();
+
+
         }
     }
 }
