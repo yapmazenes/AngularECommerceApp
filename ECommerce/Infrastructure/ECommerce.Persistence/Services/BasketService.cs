@@ -67,7 +67,7 @@ namespace ECommerce.Persistence.Services
             Basket? basket = await ContextUser();
             if (basket != null)
             {
-                BasketItem _basketItem = await _basketItemReadRepository.GetSingleAsync(bi => bi.BasketId == basket.Id && bi.ProductId == productId);
+                BasketItem _basketItem = await _basketItemReadRepository.GetSingleAsync(bi => bi.BasketId == basket.Id && bi.ProductId == productId, false);
                 if (_basketItem != null)
                     _basketItem.Quantity++;
                 else
@@ -105,12 +105,14 @@ namespace ECommerce.Persistence.Services
 
         public async Task UpdateQuantityAsync(string basketItemId, int quantity)
         {
-            BasketItem? _basketItem = await _basketItemReadRepository.GetByIdAsync(basketItemId);
+            BasketItem? _basketItem = await _basketItemReadRepository.GetByIdAsync(basketItemId, false);
             if (_basketItem != null)
             {
                 _basketItem.Quantity = quantity;
                 await _basketItemWriteRepository.SaveAsync();
             }
         }
+
+        public Task<Basket?> GetUserActiveBasket() => ContextUser();
     }
 }
