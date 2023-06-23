@@ -4,7 +4,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { BaseComponent, SpinnerType } from 'src/app/base/base.component';
 import { ListBasketItem } from 'src/app/contracts/basket/list-basket-item';
 import { CreateOrder } from 'src/app/contracts/order/create-order';
+import { BasketItemDeleteState, BasketItemRemoveDialogComponent } from 'src/app/dialogs/basket-item-remove-dialog/basket-item-remove-dialog.component';
 import { BasketService } from 'src/app/services/common/basket.service';
+import { DialogService } from 'src/app/services/common/dialog.service';
 import { OrderService } from 'src/app/services/common/order.service';
 import { CustomToastrService, ToastrMessageType, ToastrPosition } from 'src/app/services/ui/custom-toastr.service';
 declare var $: any;
@@ -17,7 +19,11 @@ declare var $: any;
 
 export class BasketsComponent extends BaseComponent implements OnInit {
 
-  constructor(spinner: NgxSpinnerService, private basketService: BasketService, private orderService: OrderService, private toastrService: CustomToastrService, private router: Router) {
+  constructor(spinner: NgxSpinnerService,
+    private basketService: BasketService, private orderService: OrderService, private toastrService: CustomToastrService,
+    private router: Router,
+    private dialogService: DialogService) {
+
     super(spinner);
   }
 
@@ -39,11 +45,18 @@ export class BasketsComponent extends BaseComponent implements OnInit {
   }
 
   async removeBasketItem($event) {
-    this.showSpinner(SpinnerType.BallAtom);
-    const baseItem = $event.target.closest("tr");
-    const basketItemId = baseItem.attributes["id"].value;
-    this.basketService.removeBasketItem(basketItemId);
-    $(baseItem).fadeOut(500, () => this.hideSpinner(SpinnerType.BallAtom));
+    this.dialogService.openDialog({
+      componentType: BasketItemRemoveDialogComponent,
+      data: BasketItemDeleteState.Yes,
+      afterClosed: async () => {
+        this.showSpinner(SpinnerType.BallAtom);
+        const baseItem = $event.target.closest("tr");
+        const basketItemId = baseItem.attributes["id"].value;
+        await this.basketService.removeBasketItem(basketItemId);
+        $(baseItem).fadeOut(500, () => this.hideSpinner(SpinnerType.BallAtom));
+      }
+    });
+
   }
 
   async createOrder() {
