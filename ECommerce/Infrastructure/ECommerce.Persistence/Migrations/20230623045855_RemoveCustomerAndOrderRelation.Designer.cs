@@ -3,6 +3,7 @@ using System;
 using ECommerce.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ECommerce.Persistence.Migrations
 {
     [DbContext(typeof(ECommerceDbContext))]
-    partial class ECommerceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230623045855_RemoveCustomerAndOrderRelation")]
+    partial class RemoveCustomerAndOrderRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -245,6 +248,9 @@ namespace ECommerce.Persistence.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid?>("CustomerId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
@@ -256,6 +262,8 @@ namespace ECommerce.Persistence.Migrations
 
                     b.HasIndex("BasketId")
                         .IsUnique();
+
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("Orders");
                 });
@@ -390,6 +398,21 @@ namespace ECommerce.Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("OrderProduct", b =>
+                {
+                    b.Property<Guid>("OrdersId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ProductsId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("OrdersId", "ProductsId");
+
+                    b.HasIndex("ProductsId");
+
+                    b.ToTable("OrderProduct");
+                });
+
             modelBuilder.Entity("ProductProductImageFile", b =>
                 {
                     b.Property<Guid>("ProductImageFilesId")
@@ -463,6 +486,10 @@ namespace ECommerce.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ECommerce.Domain.Entities.Customer", null)
+                        .WithMany("Orders")
+                        .HasForeignKey("CustomerId");
+
                     b.Navigation("Basket");
                 });
 
@@ -517,6 +544,21 @@ namespace ECommerce.Persistence.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("OrderProduct", b =>
+                {
+                    b.HasOne("ECommerce.Domain.Entities.Order", null)
+                        .WithMany()
+                        .HasForeignKey("OrdersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ECommerce.Domain.Entities.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("ProductProductImageFile", b =>
                 {
                     b.HasOne("ECommerce.Domain.Entities.ProductImageFile", null)
@@ -538,6 +580,11 @@ namespace ECommerce.Persistence.Migrations
 
                     b.Navigation("Order")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ECommerce.Domain.Entities.Customer", b =>
+                {
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("ECommerce.Domain.Entities.Identity.AppUser", b =>

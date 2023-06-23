@@ -112,5 +112,7 @@ namespace ECommerce.Persistence.Services
                 await _basketItemWriteRepository.SaveAsync();
             }
         }
+
+        public Task<Basket?> GetUserActiveBasket() => ContextUser();
     }
 }
