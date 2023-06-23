@@ -18,11 +18,15 @@ export class DashboardComponent extends BaseComponent implements OnInit {
 
     super(spinnerService);
     signalRService.start(`http://${baseHubUrl}${HubUrls.ProductHub}`);
+    signalRService.start(`http://${baseHubUrl}${HubUrls.OrderHub}`);
   }
 
   ngOnInit(): void {
     this.showSpinner(SpinnerType.BallAtom);
     this.signalRService.on(ReceiveFunctions.ProductAddedMessageReceiveFunction, message => {
+      alert(message)
+    });
+    this.signalRService.on(ReceiveFunctions.OrderAddedMessageReceiveFunction, message => {
       alert(message)
     });
 
