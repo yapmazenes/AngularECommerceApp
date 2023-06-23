@@ -8,12 +8,14 @@ import { FileUploadModule } from "../services/common/file-upload/file-upload.mod
 import { MatCardModule } from '@angular/material/card';
 import { FormsModule } from '@angular/forms';
 import { BasketItemRemoveDialogComponent } from './basket-item-remove-dialog/basket-item-remove-dialog.component';
+import { BasketCreateOrderDialogComponent } from './basket-create-order-dialog/basket-create-order-dialog.component';
 
 @NgModule({
   declarations: [
     DeleteDialogComponent,
     SelectProductImageDialogComponent,
-    BasketItemRemoveDialogComponent
+    BasketItemRemoveDialogComponent,
+    BasketCreateOrderDialogComponent
   ],
   imports: [
     CommonModule,

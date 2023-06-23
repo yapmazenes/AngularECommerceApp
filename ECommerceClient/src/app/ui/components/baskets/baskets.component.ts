@@ -4,6 +4,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { BaseComponent, SpinnerType } from 'src/app/base/base.component';
 import { ListBasketItem } from 'src/app/contracts/basket/list-basket-item';
 import { CreateOrder } from 'src/app/contracts/order/create-order';
+import { BasketCreateOrderDialogComponent, BasketCreateOrderDialogState } from 'src/app/dialogs/basket-create-order-dialog/basket-create-order-dialog.component';
 import { BasketItemDeleteState, BasketItemRemoveDialogComponent } from 'src/app/dialogs/basket-item-remove-dialog/basket-item-remove-dialog.component';
 import { BasketService } from 'src/app/services/common/basket.service';
 import { DialogService } from 'src/app/services/common/dialog.service';
@@ -45,6 +46,7 @@ export class BasketsComponent extends BaseComponent implements OnInit {
   }
 
   async removeBasketItem($event) {
+    $('#basketModal').modal('hide');
     this.dialogService.openDialog({
       componentType: BasketItemRemoveDialogComponent,
       data: BasketItemDeleteState.Yes,
@@ -54,26 +56,35 @@ export class BasketsComponent extends BaseComponent implements OnInit {
         const basketItemId = baseItem.attributes["id"].value;
         await this.basketService.removeBasketItem(basketItemId);
         $(baseItem).fadeOut(500, () => this.hideSpinner(SpinnerType.BallAtom));
+        $('#basketModal').modal('show');
       }
     });
 
   }
 
   async createOrder() {
-    this.showSpinner(SpinnerType.BallAtom);
 
-    let order = new CreateOrder();
-    order.address = "Adres";
-    order.description = "Aciklama";
+    $('#basketModal').modal('hide');
+    this.dialogService.openDialog({
+      componentType: BasketCreateOrderDialogComponent,
+      data: BasketCreateOrderDialogState.Yes,
+      afterClosed: async () => {
+        this.showSpinner(SpinnerType.BallAtom);
 
-    await this.orderService.create(order);
+        let order = new CreateOrder();
+        order.address = "Adres";
+        order.description = "Aciklama";
 
-    this.hideSpinner(SpinnerType.BallAtom);
-    this.toastrService.message("We have received your Order.", "Congratulations, Your Order Created!", {
-      messageType: ToastrMessageType.Info,
-      position: ToastrPosition.TopRight
+        await this.orderService.create(order);
+
+        this.hideSpinner(SpinnerType.BallAtom);
+        this.toastrService.message("We have received your Order.", "Congratulations, Your Order Created!", {
+          messageType: ToastrMessageType.Info,
+          position: ToastrPosition.TopRight
+        });
+        this.router.navigate(["/"]);
+        
+      }
     });
-    this.router.navigate(["/"]);
   }
-
 }

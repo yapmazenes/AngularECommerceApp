@@ -1,7 +1,7 @@
 <div class="container">
     <div class="row">
 
-        <div class=" row">
+        <div class="row">
             <div class="offset-3 col-3 mb-3">
                 <label for="userName" class="form-label">Username / Email *</label>
                 <input #userNameOrEmail type="text" class="form-control" placeholder="Username / Email"
@@ -16,7 +16,7 @@
         </div>
         <br>
         <div class="offset-3 col-3">
-            <button type="submit" class=" btn btn-primary"
+            <button #loginButton type="submit" class=" btn btn-primary"
                 (click)="login(userNameOrEmail.value,password.value)">Login</button>
         </div>
 
