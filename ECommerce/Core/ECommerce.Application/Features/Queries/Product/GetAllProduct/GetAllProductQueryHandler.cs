@@ -20,8 +20,8 @@ namespace ECommerce.Application.Features.Queries.Product.GetAllProduct
 
         public async Task<GetAllProductQueryResponse> Handle(GetAllProductQueryRequest request, CancellationToken cancellationToken)
         {
-            var totalCount = _productReadRepository.GetAll(false).Count();
-            var products = _productReadRepository.GetAll(false).Skip(request.Page * request.Size).Take(request.Size).Include(x => x.ProductImageFiles).Select(p => new
+            var totalCount = _productReadRepository.GetAll().Count();
+            var products = _productReadRepository.GetAll().Skip(request.Page * request.Size).Take(request.Size).Include(x => x.ProductImageFiles).Select(p => new
             {
                 p.Id,
                 p.Name,
@@ -34,7 +34,7 @@ namespace ECommerce.Application.Features.Queries.Product.GetAllProduct
 
             return new()
             {
-                Products = products,
+                Datas = products,
                 TotalCount = totalCount
             };
         }
