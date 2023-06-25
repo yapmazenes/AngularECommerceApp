@@ -10,7 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { DeleteDirective } from 'src/app/directives/admin/delete.directive';
+
 import { MatDialogModule } from '@angular/material/dialog';
 import { DialogModule } from 'src/app/dialogs/dialog.module';
 import { FileUploadModule } from 'src/app/services/common/file-upload/file-upload.module';
@@ -20,7 +20,6 @@ import { FileUploadModule } from 'src/app/services/common/file-upload/file-uploa
     ProductsComponent,
     CreateComponent,
     ListComponent,
-    DeleteDirective,
   ],
   imports: [
     CommonModule,

@@ -46,7 +46,7 @@ export class ListComponent extends BaseComponent implements OnInit {
 
       });
 
-      this.products = data.products;
+      this.products = data.datas;
 
       this.products = this.products.map<ListProduct>(p => {
         const listProduct: ListProduct = {

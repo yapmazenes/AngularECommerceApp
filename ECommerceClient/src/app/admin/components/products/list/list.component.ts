@@ -35,7 +35,7 @@ export class ListComponent extends BaseComponent implements OnInit {
     const allProducts: BasePageModel<ListProduct[]> = await this.productService.getAll(pageIndex, pageSize, () => this.hideSpinner(SpinnerType.BallAtom),
       errorMessage => this.alertifyService.message(errorMessage,
         { dismissOthers: true, messageType: MessageType.Error, position: Position.TopRight }));
-    this.dataSource = new MatTableDataSource<ListProduct>(allProducts.products);
+    this.dataSource = new MatTableDataSource<ListProduct>(allProducts.datas);
     this.paginator.length = allProducts.totalCount;
   }
 
