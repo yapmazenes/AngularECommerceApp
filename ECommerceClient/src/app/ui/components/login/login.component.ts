@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BaseComponent, SpinnerType } from 'src/app/base/base.component';
@@ -17,6 +17,8 @@ export class LoginComponent extends BaseComponent {
     super(spinner);
   }
 
+  @ViewChild('loginButton') loginButton: ElementRef<HTMLElement>;
+
   async login(userNameOrEmail: string, password: string) {
 
     this.showSpinner(SpinnerType.BallAtom);
@@ -34,5 +36,12 @@ export class LoginComponent extends BaseComponent {
       this.hideSpinner(SpinnerType.BallAtom);
 
     });
+  }
+
+  @HostListener('document:keyup', ['$event'])
+  handleEnterKeyboardEvent(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      this.loginButton.nativeElement.click();
+    }
   }
 }

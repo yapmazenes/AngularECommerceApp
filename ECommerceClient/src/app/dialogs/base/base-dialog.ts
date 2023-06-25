@@ -5,7 +5,10 @@ export class BaseDialog<DialogComponent> {
         public dialogRef: MatDialogRef<DialogComponent>
     ) { }
 
-    close(): void {
+    close(closeCallback?: () => void): void {
         this.dialogRef.close();
+
+        if (closeCallback != null)
+            closeCallback();
     }
 }

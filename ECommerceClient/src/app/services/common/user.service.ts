@@ -50,18 +50,24 @@ export class UserService {
     callBackFunction();
   }
 
-  async refreshTokenLogin(refreshToken: string, callBackFunction?: () => void): Promise<any> {
+  async refreshTokenLogin(refreshToken: string, callBackFunction?: (state) => void): Promise<any> {
     const observable: Observable<any | LoginResponse> = this.httpClientService.post({
       action: "refreshTokenLogin",
       controller: "authentication",
     }, { RefreshToken: refreshToken });
 
-    const loginResponse = await lastValueFrom(observable) as LoginResponse;
+    try {
+      const loginResponse = await lastValueFrom(observable) as LoginResponse;
 
-    if (loginResponse)
-      this.processLogin(loginResponse, false);
+      if (loginResponse)
+        this.processLogin(loginResponse, false);
 
-    callBackFunction();
+      callBackFunction(loginResponse ? true : false);
+
+    } catch {
+
+      callBackFunction(false);
+    }
   }
 }
 

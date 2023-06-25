@@ -4,11 +4,14 @@ import { ProductsModule } from './products/products.module';
 import { OrdersModule } from './orders/orders.module';
 import { CustomersModule } from './customers/customers.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { DeleteDirective } from 'src/app/directives/admin/delete.directive';
 
 
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    DeleteDirective
+  ],
   imports: [
     CommonModule,
     ProductsModule,
