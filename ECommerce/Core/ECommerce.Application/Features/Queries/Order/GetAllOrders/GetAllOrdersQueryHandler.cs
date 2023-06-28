@@ -22,26 +22,27 @@ namespace ECommerce.Application.Features.Queries.Order.GetAllOrders
                                 .ThenInclude(x => x.BasketItems)
                                     .ThenInclude(x => x.Product);
 
-            var datasTask = orderQuery
+            var datasTask = await orderQuery
                 .Skip(request.Page * request.Size)
                 .Take(request.Size)
                 .Select(x => new
                 {
+                    Id = x.Id,
                     CreatedDate = x.CreatedDate,
                     OrderCode = x.OrderCode,
                     TotalPrice = x.Basket.BasketItems.Sum(y => y.Product.Price * y.Quantity),
                     UserName = x.Basket.User.UserName ?? ""
                 }).ToListAsync();
 
-            var countTask = orderQuery.CountAsync();
+            var countTask = await orderQuery.CountAsync();
 
-            await Task.WhenAll(datasTask, countTask);
+            //await Task.WhenAll(datasTask, countTask);
 
             return new()
             {
-                Datas = await datasTask,
+                Datas = datasTask,
 
-                TotalCount = await countTask,
+                TotalCount = countTask,
             };
         }
     }
