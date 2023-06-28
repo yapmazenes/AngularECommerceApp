@@ -1,0 +1,26 @@
+.order-detail-table .order-detail-table-description {
+  width: 100%;
+}
+
+.order-detail-table-text {
+  font-size: 12px;
+}
+
+.order-detail-table-price {
+  color: red;
+  font-size: 20px;
+}
+
+.mat-mdc-row .mat-mdc-cell {
+  border-bottom: 1px solid transparent;
+  border-top: 1px solid transparent;
+  cursor: pointer;
+}
+
+.mat-mdc-row:hover .mat-mdc-cell {
+  border-color: currentColor;
+}
+
+.order-detail-row-is-clicked {
+  font-weight: bold;
+}

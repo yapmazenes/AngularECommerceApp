@@ -13,6 +13,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 
 import { FileUploadModule } from 'src/app/services/common/file-upload/file-upload.module';
 import { DialogModule } from 'src/app/dialogs/dialog.module';
+import { DirectiveModule } from 'src/app/directives/directive/directive.module';
 
 
 
@@ -20,14 +21,15 @@ import { DialogModule } from 'src/app/dialogs/dialog.module';
   declarations: [
     OrdersComponent,
     ListComponent,
-    
+
   ],
   imports: [
     CommonModule,
     RouterModule.forChild([{ path: "", component: OrdersComponent }]),
     MatSidenavModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatTableModule, MatPaginatorModule, MatDialogModule,
     FileUploadModule,
-    DialogModule
+    DialogModule,
+    DirectiveModule
   ]
 })
 export class OrdersModule { }

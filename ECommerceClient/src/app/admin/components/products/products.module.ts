@@ -14,6 +14,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatDialogModule } from '@angular/material/dialog';
 import { DialogModule } from 'src/app/dialogs/dialog.module';
 import { FileUploadModule } from 'src/app/services/common/file-upload/file-upload.module';
+import { DirectiveModule } from 'src/app/directives/directive/directive.module';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { FileUploadModule } from 'src/app/services/common/file-upload/file-uploa
     RouterModule.forChild([{ path: "", component: ProductsComponent }]),
     MatSidenavModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatTableModule, MatPaginatorModule, MatDialogModule,
     FileUploadModule,
-    DialogModule
+    DialogModule,
+    DirectiveModule
   ]
 })
 export class ProductsModule { }
