@@ -5,6 +5,7 @@ import { lastValueFrom } from 'rxjs';
 import { ListOrder } from 'src/app/contracts/order/list-order';
 import { BasePageModel } from 'src/app/contracts/BasePageModel';
 import { HttpErrorResponse } from '@angular/common/http';
+import { OrderDetail } from 'src/app/contracts/order/order-detail';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,19 @@ export class OrderService {
       controller: "orders",
       queryString: `page=${page}&size=${size}`
     });
+
+    var promiseValue = lastValueFrom(observableData);
+
+    promiseValue.then(d => successCallback())
+      .catch((error: HttpErrorResponse) => errorCallback(error.message));
+
+    return await promiseValue;
+  }
+
+  async getOrderById(orderId: string, successCallback?: () => void, errorCallback?: (message: string) => void): Promise<OrderDetail> {
+    const observableData = this.httpClientService.get<OrderDetail>({
+      controller: "orders",
+    }, orderId);
 
     var promiseValue = lastValueFrom(observableData);
 
