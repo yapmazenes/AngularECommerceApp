@@ -27,7 +27,7 @@ namespace ECommerce.Application.Features.Commands.Order.CreateOrder
                 Address = request.Address,
                 BasketId = userActiveBasket.Id,
                 Description = request.Description,
-                OrderCode = (new Random().NextDouble() * 100000).ToString().Replace(".", ""),
+                OrderCode = (new Random().NextDouble() * 100000).ToString().Replace(",", ""),
             });
 
             await _orderWriteRepository.SaveAsync();
