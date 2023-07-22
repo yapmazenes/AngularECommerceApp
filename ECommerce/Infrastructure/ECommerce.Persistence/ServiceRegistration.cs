@@ -8,6 +8,7 @@ using ECommerce.Persistence.Repositories;
 using ECommerce.Persistence.Repositories.File;
 using ECommerce.Persistence.Repositories.InvoiceFile;
 using ECommerce.Persistence.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -31,7 +32,9 @@ namespace ECommerce.Persistence
                 options.Password.RequireUppercase = false;
                 options.User.RequireUniqueEmail = true;
 
-            }).AddEntityFrameworkStores<ECommerceDbContext>();
+            }).AddEntityFrameworkStores<ECommerceDbContext>()
+            .AddDefaultTokenProviders();
+
             services.AddScoped<ICustomerReadRepository, CustomerReadRepository>();
             services.AddScoped<ICustomerWriteRepository, CustomerWriteRepository>();
 
