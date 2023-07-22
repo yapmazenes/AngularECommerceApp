@@ -1,13 +1,8 @@
 ﻿using ECommerce.Application.Abstractions.Services;
-using Microsoft.EntityFrameworkCore.Query.Internal;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerce.Infrastructure.Services
 {
@@ -20,12 +15,12 @@ namespace ECommerce.Infrastructure.Services
             _configuration = configuration;
         }
 
-        public async Task SendMessageAsync(string to, string subject, string body, bool isBodyHtml = true)
+        public async Task SendMailAsync(string to, string subject, string body, bool isBodyHtml = true)
         {
-            await SendMessageAsync(new[] { to }, subject, body, isBodyHtml);
+            await SendMailAsync(new[] { to }, subject, body, isBodyHtml);
         }
 
-        public async Task SendMessageAsync(string[] tos, string subject, string body, bool isBodyHtml = true)
+        public async Task SendMailAsync(string[] tos, string subject, string body, bool isBodyHtml = true)
         {
             MailMessage message = new MailMessage();
             message.IsBodyHtml = isBodyHtml;
@@ -40,6 +35,20 @@ namespace ECommerce.Infrastructure.Services
             smtpClient.EnableSsl = true;
             smtpClient.Host = _configuration["MailSettings:Host"];
             await smtpClient.SendMailAsync(message);
+        }
+
+        public async Task SendPasswordResetMailAsync(string to, string userId, string resetToken)
+        {
+            var mail = new StringBuilder();
+            mail.AppendLine("Merhaba<br>Eğer yeni şifre talebinde bulunduysanız aşağıdaki linkten şifrenizi yenileyebilirsiniz.<br>");
+            mail.AppendLine("<strong><a target=\"_blank\" href=\"");
+            mail.Append(_configuration["ECommerceClientUrl"]);
+            mail.Append("/update-password/");
+            mail.AppendLine(userId);
+            mail.AppendLine("/");
+            mail.AppendLine(resetToken);
+            mail.AppendLine("\">Yeni şifre talebi için tıklayınız...</a></strong></br></br><span style=\"font-size:12px;\">NOT: Bu talep sizin tarafınızdan oluşturulmadı ise lütfen dikkate almayınız</span>");
+            await SendMailAsync(to, "Şifre Yenileme Talebi", mail.ToString());
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using ECommerce.Application.Features.Commands.AppUser.CreateUser;
+using ECommerce.Application.Features.Commands.AppUser.UpdatePassword;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,6 +21,13 @@ namespace ECommerce.API.Controllers
         {
             var response = await _mediator.Send(createUserCommandRequest);
 
+            return Ok(response);
+        }
+
+        [HttpPost("update-password")]
+        public async Task<IActionResult> UpdatePassword(UpdatePasswordCommandRequest updatePasswordCommandRequest)
+        {
+            var response = await _mediator.Send(updatePasswordCommandRequest);
             return Ok(response);
         }
     }
