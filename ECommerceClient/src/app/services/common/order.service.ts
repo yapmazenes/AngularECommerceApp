@@ -48,4 +48,15 @@ export class OrderService {
 
     return await promiseValue;
   }
+
+  async completeOrder(id: string) {
+    const observable = this.httpClientService.postWithResponse<any>({
+      controller: "Orders",
+      action: "complete-order"
+    }, {
+      orderId: id
+    });
+
+    return await lastValueFrom(observable);
+  }
 }

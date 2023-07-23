@@ -5,7 +5,7 @@ namespace ECommerce.Application.Features.Commands.ProductImageFile.UploadProduct
 {
     public class UploadProductImageCommandRequest : IRequest<UploadProductImageCommandResponse>
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
         public IFormFileCollection? Files { get; set; }
     }
 }

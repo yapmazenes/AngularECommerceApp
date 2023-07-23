@@ -4,4 +4,5 @@ export class ListOrder {
     userName: string;
     totalPrice: number;
     createdDate: Date;
+    completed: boolean;
 }

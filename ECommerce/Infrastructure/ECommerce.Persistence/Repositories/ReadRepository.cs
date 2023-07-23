@@ -33,7 +33,7 @@ namespace ECommerce.Persistence.Repositories
             return await queriable.FirstOrDefaultAsync(query);
         }
 
-        public async Task<T> GetByIdAsync(string id, bool asNoTracking = true)
+        public async Task<T> GetByIdAsync(Guid id, bool asNoTracking = true)
         {
             var queriable = Table.AsQueryable();
 
@@ -42,7 +42,7 @@ namespace ECommerce.Persistence.Repositories
                 queriable = Table.AsNoTracking();
             }
 
-            return await queriable.FirstOrDefaultAsync(q => q.Id == Guid.Parse(id));
+            return await queriable.FirstOrDefaultAsync(q => q.Id == id);
         }
     }
 }

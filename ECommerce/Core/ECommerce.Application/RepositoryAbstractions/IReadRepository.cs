@@ -8,6 +8,6 @@ namespace ECommerce.Application.RepositoryAbstractions
         IQueryable<T> GetAll(bool asNoTracking = true);
         IQueryable<T> GetWhere(Expression<Func<T, bool>> query, bool asNoTracking = true);
         Task<T> GetSingleAsync(Expression<Func<T, bool>> query, bool asNoTracking = true);
-        Task<T> GetByIdAsync(string id, bool asNoTracking = true);
+        Task<T> GetByIdAsync(Guid id, bool asNoTracking = true);
     }
 }

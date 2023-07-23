@@ -14,18 +14,18 @@ export class HttpClientService {
   }
 
   private getQueryString(queryString?: string): string {
-    return queryString ?`?${queryString}` : '';
-  } 
+    return queryString ? `?${queryString}` : '';
+  }
 
   private getIdParameter(id?: string): string {
     return id ? `/${id}` : '';
   }
-  
+
   get<T>(requestParameters: Partial<RequestParameters>, id?: string): Observable<T> {
     let url: string = "";
     if (requestParameters.customEndPoint)
       url = requestParameters.customEndPoint;
-    else    
+    else
       url = `${this.url(requestParameters)}${this.getIdParameter(id)}${this.getQueryString(requestParameters.queryString)}`;
 
     return this.httpClient.get<T>(url, { headers: requestParameters.headers });
@@ -40,6 +40,17 @@ export class HttpClientService {
       url = `${this.url(requestParameters)}${this.getQueryString(requestParameters.queryString)}`;
 
     return this.httpClient.post<T>(url, body, { headers: requestParameters.headers });
+  }
+
+  postWithResponse<TResponse>(requestParameters: Partial<RequestParameters>, body: Partial<any>): Observable<TResponse> {
+    let url: string = "";
+
+    if (requestParameters.customEndPoint)
+      url = requestParameters.customEndPoint;
+    else
+      url = `${this.url(requestParameters)}${this.getQueryString(requestParameters.queryString)}`;
+
+    return this.httpClient.post<TResponse>(url, body, { headers: requestParameters.headers });
   }
 
   put<T>(requestParameters: Partial<RequestParameters>, body: Partial<T>): Observable<T> {

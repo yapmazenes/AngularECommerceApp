@@ -6,7 +6,7 @@ import { BaseComponent, SpinnerType } from "src/app/base/base.component";
 import { BasePageModel } from "src/app/contracts/BasePageModel";
 
 import { ListOrder } from "src/app/contracts/order/list-order";
-import { OrderDetailDialogComponent, OrderDetailDialogState } from "src/app/dialogs/order-detail-dialog/order-detail-dialog.component";
+import { OrderDetailDialogComponent } from "src/app/dialogs/order-detail-dialog/order-detail-dialog.component";
 import { AlertifyService, MessageType, Position } from "src/app/services/admin/alertify.service";
 import { DialogService } from "src/app/services/common/dialog.service";
 import { OrderService } from "src/app/services/common/order.service";
@@ -41,7 +41,7 @@ export class ListComponent extends BaseComponent implements OnInit {
     const orderDatas: BasePageModel<ListOrder[]> = await this.orderService.getAll(pageIndex, pageSize, () => this.hideSpinner(SpinnerType.BallAtom),
       errorMessage => this.alertifyService.message(errorMessage,
         { dismissOthers: true, messageType: MessageType.Error, position: Position.TopRight }));
-    
+
     this.dataSource = new MatTableDataSource<ListOrder>(orderDatas.datas);
     this.paginator.length = orderDatas.totalCount;
   }
@@ -66,6 +66,6 @@ export class ListComponent extends BaseComponent implements OnInit {
   }
 
   dataSource: MatTableDataSource<ListOrder> = null;
-  displayedColumns: string[] = ['orderCode', 'userName', 'totalPrice', 'createdDate', 'viewDetail', 'delete'];
+  displayedColumns: string[] = ['orderCode', 'userName', 'totalPrice', 'createdDate', 'completed', 'viewDetail', 'delete'];
   @ViewChild(MatPaginator) paginator: MatPaginator;
 }
