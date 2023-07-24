@@ -93,7 +93,7 @@ namespace ECommerce.Persistence.Services
             return result.BasketItems;
         }
 
-        public async Task RemoveBasketItemAsync(string basketItemId)
+        public async Task RemoveBasketItemAsync(Guid basketItemId)
         {
             BasketItem? basketItem = await _basketItemReadRepository.GetByIdAsync(basketItemId);
             if (basketItem != null)
@@ -103,7 +103,7 @@ namespace ECommerce.Persistence.Services
             }
         }
 
-        public async Task UpdateQuantityAsync(string basketItemId, int quantity)
+        public async Task UpdateQuantityAsync(Guid basketItemId, int quantity)
         {
             BasketItem? _basketItem = await _basketItemReadRepository.GetByIdAsync(basketItemId, false);
             if (_basketItem != null)

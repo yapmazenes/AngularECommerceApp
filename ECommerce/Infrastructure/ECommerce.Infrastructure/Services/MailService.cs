@@ -34,7 +34,7 @@ namespace ECommerce.Infrastructure.Services
             smtpClient.Port = int.Parse(_configuration["MailSettings:Port"]);
             smtpClient.EnableSsl = true;
             smtpClient.Host = _configuration["MailSettings:Host"];
-            await smtpClient.SendMailAsync(message);
+            //await smtpClient.SendMailAsync(message);
         }
 
         public async Task SendPasswordResetMailAsync(string to, string userId, string resetToken)
@@ -49,6 +49,15 @@ namespace ECommerce.Infrastructure.Services
             mail.AppendLine(resetToken);
             mail.AppendLine("\">Yeni şifre talebi için tıklayınız...</a></strong></br></br><span style=\"font-size:12px;\">NOT: Bu talep sizin tarafınızdan oluşturulmadı ise lütfen dikkate almayınız</span>");
             await SendMailAsync(to, "Şifre Yenileme Talebi", mail.ToString());
+        }
+
+        public async Task SendCompletedOrderMailAsync(string to, string orderCode, DateTime orderDate, string userName)
+        {
+            var mail = new StringBuilder();
+            mail.AppendLine("Sayın ").Append(userName).Append(" Merhaba<br>").Append(orderDate).Append(" tarihinde vermiş olduğunuz ")
+                .Append(orderCode).Append(" kodlu siparişiniz tamamlanmış ve kargo firmasına teslim edilmiştir.");
+
+            await SendMailAsync(to, $"{orderCode} numaralı Siparişiniz Hakkında", mail.ToString());
         }
     }
 }

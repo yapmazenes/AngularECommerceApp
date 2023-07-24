@@ -7,10 +7,12 @@ namespace ECommerce.Application.Features.Queries.Order.GetAllOrders
     public class GetAllOrdersQueryHandler : IRequestHandler<GetAllOrdersQueryRequest, GetAllOrdersQueryResponse>
     {
         private readonly IOrderReadRepository _orderReadRepository;
+        private readonly ICompletedOrderReadRepository _completedOrderReadRepository;
 
-        public GetAllOrdersQueryHandler(IOrderReadRepository orderReadRepository)
+        public GetAllOrdersQueryHandler(IOrderReadRepository orderReadRepository, ICompletedOrderReadRepository completedOrderReadRepository)
         {
             _orderReadRepository = orderReadRepository;
+            _completedOrderReadRepository = completedOrderReadRepository;
         }
 
         public async Task<GetAllOrdersQueryResponse> Handle(GetAllOrdersQueryRequest request, CancellationToken cancellationToken)
@@ -22,27 +24,36 @@ namespace ECommerce.Application.Features.Queries.Order.GetAllOrders
                                 .ThenInclude(x => x.BasketItems)
                                     .ThenInclude(x => x.Product);
 
-            var datasTask = await orderQuery
+            var skippedOrdersQuery = orderQuery
                 .Skip(request.Page * request.Size)
-                .Take(request.Size)
-                .Select(x => new
-                {
-                    Id = x.Id,
-                    CreatedDate = x.CreatedDate,
-                    OrderCode = x.OrderCode,
-                    TotalPrice = x.Basket.BasketItems.Sum(y => y.Product.Price * y.Quantity),
-                    UserName = x.Basket.User.UserName ?? ""
-                }).ToListAsync();
+                .Take(request.Size);
 
-            var countTask = await orderQuery.CountAsync();
+
+            var unCompletedOrderQuery = from order in skippedOrdersQuery
+                                        join completedOrders in _completedOrderReadRepository.Table
+                                        on order.Id equals completedOrders.OrderId into unCompletedOrdersQuery
+                                        from unCompletedOrders in unCompletedOrdersQuery.DefaultIfEmpty()
+                                        select new
+                                        {
+                                            Id = order.Id,
+                                            CreatedDate = order.CreatedDate,
+                                            OrderCode = order.OrderCode,
+                                            TotalPrice = order.Basket.BasketItems.Sum(y => y.Product.Price * y.Quantity),
+                                            UserName = order.Basket.User.UserName ?? "",
+                                            Completed = unCompletedOrders != null
+                                        };
+
+            var datas = await unCompletedOrderQuery.ToListAsync();
+
+            var count = await orderQuery.CountAsync();
 
             //await Task.WhenAll(datasTask, countTask);
 
             return new()
             {
-                Datas = datasTask,
+                Datas = datas,
 
-                TotalCount = countTask,
+                TotalCount = count,
             };
         }
     }

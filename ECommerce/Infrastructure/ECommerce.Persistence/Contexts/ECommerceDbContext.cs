@@ -20,7 +20,7 @@ namespace ECommerce.Persistence.Contexts
         public DbSet<InvoiceFile> InvoiceFiles { get; set; }
         public DbSet<Basket> Baskets { get; set; }
         public DbSet<BasketItem> BasketItems { get; set; }
-
+        public DbSet<CompletedOrder> CompletedOrders { get; set; }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
@@ -61,6 +61,11 @@ namespace ECommerce.Persistence.Contexts
             builder.Entity<Order>()
                 .HasIndex(x => x.OrderCode)
                 .IsUnique();
+
+            builder.Entity<Order>()
+                .HasOne(x => x.CompletedOrder)
+                .WithOne(c => c.Order)
+                .HasForeignKey<CompletedOrder>(c => c.OrderId);
 
             base.OnModelCreating(builder);
         }
