@@ -1,9 +1,11 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { BaseDialog } from '../base/base-dialog';
 import { MatSelectionList } from '@angular/material/list';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { SpinnerType } from 'src/app/base/base.component';
+import { RoleService } from 'src/app/services/common/role.service';
+import { ListRole } from 'src/app/contracts/role/list-role';
 
 declare var $: any;
 
@@ -21,7 +23,7 @@ export class AuthorizeMenuDialogComponent extends BaseDialog<AuthorizeMenuDialog
     super(dialogRef)
   }
 
-  roles: { datas: List_Role[], totalCount: number };
+  roles: { datas: ListRole[], totalCount: number };
   assignedRoles: Array<string>;
   listRoles: { name: string, selected: boolean }[];
 

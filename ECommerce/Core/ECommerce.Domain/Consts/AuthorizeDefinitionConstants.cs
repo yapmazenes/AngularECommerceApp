@@ -12,5 +12,6 @@ namespace ECommerce.Domain.Consts
         public const string Orders = "Orders";
         public const string Products = "Products";
         public const string ApplicationConfigurations = "ApplicationConfigurations";
+        public const string Roles = "Roles";
     }
 }
