@@ -16,6 +16,7 @@ import { CompleteOrderDialogComponent } from './complete-order-dialog/complete-o
 import { AuthorizeMenuDialogComponent } from './authorize-menu-dialog/authorize-menu-dialog.component';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatListModule } from '@angular/material/list';
+
 @NgModule({
   declarations: [
     DeleteDialogComponent,

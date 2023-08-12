@@ -15,11 +15,11 @@ namespace ECommerce.API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(AuthenticationSchemes = "Admin")]
-    public class RoleController : ControllerBase
+    public class RolesController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public RoleController(IMediator mediator)
+        public RolesController(IMediator mediator)
         {
             _mediator = mediator;
         }
