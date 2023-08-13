@@ -13,5 +13,6 @@ namespace ECommerce.Domain.Consts
         public const string Products = "Products";
         public const string ApplicationConfigurations = "ApplicationConfigurations";
         public const string Roles = "Roles";
+        public const string Users = "Users";
     }
 }

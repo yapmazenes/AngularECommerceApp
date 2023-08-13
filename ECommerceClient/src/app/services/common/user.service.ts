@@ -6,6 +6,9 @@ import { Observable, lastValueFrom } from 'rxjs';
 import { Token } from 'src/app/contracts/login/token';
 import { CustomToastrService, ToastrMessageType, ToastrPosition } from '../ui/custom-toastr.service';
 import { LoginResponse } from 'src/app/contracts/login/login-response';
+import { ListUser } from '../../contracts/users/list-user';
+import { BasePageModel } from '../../contracts/BasePageModel';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +23,20 @@ export class UserService {
     }, user);
 
     return await lastValueFrom(observable) as CreateUser;
+  }
+
+  async getAll(page: number = 0, size: number = 5, successCallBack: () => void, errorCallBack: (errorMessage: any) => void) {
+    const observableData = this.httpClientService.get<BasePageModel<ListUser[]>>({
+      controller: "users",
+      queryString: `page=${page}&size=${size}`
+    });
+
+    var promiseValue = lastValueFrom(observableData);
+
+    promiseValue.then(d => successCallBack())
+      .catch((error: HttpErrorResponse) => errorCallBack(error.message));
+
+    return await promiseValue;
   }
 
   processLogin(loginResponse: LoginResponse, showNotify: boolean) {
@@ -111,5 +128,37 @@ export class UserService {
     promiseData.then(value => successCallBack()).catch(error => errorCallBack(error));
     await promiseData;
   }
+
+  async assignRoleToUser(userId: string, roles: string[], successCallBack?: () => void, errorCallBack?: (error) => void) {
+    const observable = this.httpClientService.post({
+      controller: "Users",
+      action: "assign-role-to-user"
+    }, {
+      roles: roles,
+      userId: userId
+    });
+
+    const promiseData = observable.subscribe({
+      next: successCallBack,
+      error: errorCallBack
+    });
+
+    await promiseData;
+
+  }
+
+  async getRolesToUser(userId: string, successCallBack?: () => void, errorCallBack?: (error) => void) {
+    const observable = this.httpClientService.get<{ roles: string[] }>({
+      controller: "Users",
+      action: "get-roles-to-user"
+    }, userId);
+
+    const promiseData = lastValueFrom(observable);
+
+    promiseData.then(successCallBack).catch(errorCallBack);
+
+    return (await promiseData)?.roles;
+  }
+
 }
 
