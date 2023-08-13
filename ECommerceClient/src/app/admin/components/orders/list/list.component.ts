@@ -39,7 +39,7 @@ export class ListComponent extends BaseComponent implements OnInit {
     }
 
     const orderDatas: BasePageModel<ListOrder[]> = await this.orderService.getAll(pageIndex, pageSize, () => this.hideSpinner(SpinnerType.BallAtom),
-      errorMessage => this.alertifyService.message(errorMessage,
+      (errorMessage: any) => this.alertifyService.message(errorMessage.message,
         { dismissOthers: true, messageType: MessageType.Error, position: Position.TopRight }));
 
     this.dataSource = new MatTableDataSource<ListOrder>(orderDatas.datas);

@@ -69,6 +69,7 @@ namespace ECommerce.Persistence
             services.AddScoped<IEndpointWriteRepository, EndpointWriteRepository>();
 
             services.AddScoped<IBasketService, BasketService>();
+            services.AddScoped<IUserService, UserService>();
 
 
         }
