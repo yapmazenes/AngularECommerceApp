@@ -34,6 +34,10 @@ export class HttpErrorHandlerInterceptorService implements HttpInterceptor {
             }
 
           }).then(data => {
+            this.toastrService.message("You are not authorized to perform this action.", "Authorization Information", {
+              messageType: ToastrMessageType.Warning,
+              position: ToastrPosition.TopRight
+            });
           });
           break;
         case HttpStatusCode.InternalServerError:

@@ -1,5 +1,6 @@
 using ECommerce.API.Configurations.Serilog.ColumnWriters;
 using ECommerce.API.Extensions;
+using ECommerce.API.Filters;
 using ECommerce.Application;
 using ECommerce.Infrastructure;
 using ECommerce.Infrastructure.Filters;
@@ -33,7 +34,11 @@ builder.Services.AddCors(options =>
         policy.WithOrigins("http://localhost:4200", "https://localhost:4200").
     AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
 
-builder.Services.AddControllers(x => x.Filters.Add<ValidationFilter>()).ConfigureApiBehaviorOptions(options =>
+builder.Services.AddControllers(x =>
+{
+    x.Filters.Add<ValidationFilter>();
+    x.Filters.Add<RolePermissionFilter>();
+}).ConfigureApiBehaviorOptions(options =>
 {
     options.SuppressModelStateInvalidFilter = true;
 });

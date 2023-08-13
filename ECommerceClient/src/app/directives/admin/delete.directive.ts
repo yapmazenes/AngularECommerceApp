@@ -42,7 +42,6 @@ export class DeleteDirective {
       data: DeleteState.Yes,
       afterClosed: async () => {
         const td: HTMLTableCellElement = this.element.nativeElement;
-        debugger;;
         this.httpClientService.delete({ controller: this.controller }, this.id).subscribe(data => {
           $(td.parentElement).animate({
             opacity: 0,
