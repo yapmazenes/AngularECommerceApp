@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>Product Images</h2>
+<mat-dialog-content class="mat-typography">
+
+  <app-file-upload [options]="options"></app-file-upload>
+
+  <mat-card class="product-image-card" *ngFor="let image of images">
+    <mat-card-header>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="flexRadioDefault" (click) ="changeShowcase(image.id)" [checked]="image.showcase == true">
+      </div>
+    </mat-card-header>
+    <img width="250" height="250" *ngIf="image.path.length > 0 == false" mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+    <img width="250" height="250" *ngIf="image.path.length > 0 == true" mat-card-image src="http://localhost:5174{{image.path}}" alt="Photo of a Shiba Inu">
+    <mat-card-content>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="warn" (click)="deleteImage(image.id)">DELETE</button>
+    </mat-card-actions>
+  </mat-card>
+
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+</mat-dialog-actions>
