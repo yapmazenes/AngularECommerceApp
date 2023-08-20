@@ -70,8 +70,7 @@ namespace ECommerce.Persistence
 
             services.AddScoped<IBasketService, BasketService>();
             services.AddScoped<IUserService, UserService>();
-
-
+            services.AddScoped<IProductService, ProductService>();
         }
     }
 }

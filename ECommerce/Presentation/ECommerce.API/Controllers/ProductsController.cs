@@ -1,7 +1,9 @@
-﻿using ECommerce.Application.CustomAttributes;
+﻿using ECommerce.Application.Abstractions.Services;
+using ECommerce.Application.CustomAttributes;
 using ECommerce.Application.Features.Commands.Product.CreateProduct;
 using ECommerce.Application.Features.Commands.Product.RemoveProduct;
 using ECommerce.Application.Features.Commands.Product.UpdateProduct;
+using ECommerce.Application.Features.Commands.Product.UpdateProductStockWithQRCode;
 using ECommerce.Application.Features.Commands.ProductImageFile.ChangeShowcaseImage;
 using ECommerce.Application.Features.Commands.ProductImageFile.RemoveProductImage;
 using ECommerce.Application.Features.Commands.ProductImageFile.UploadProductImage;
@@ -22,9 +24,11 @@ namespace ECommerce.API.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IMediator _mediator;
-        public ProductsController(IMediator mediator)
+        private readonly IProductService _productService;
+        public ProductsController(IMediator mediator, IProductService productService)
         {
             _mediator = mediator;
+            _productService = productService;
         }
 
         [HttpGet]
@@ -38,6 +42,20 @@ namespace ECommerce.API.Controllers
         public async Task<IActionResult> Get([FromRoute] GetByIdProductQueryRequest getByIdProductQueryRequest)
         {
             GetByIdProductQueryResponse response = await _mediator.Send(getByIdProductQueryRequest);
+            return Ok(response);
+        }
+
+        [HttpGet("qrcode/{productId}")]
+        public async Task<IActionResult> GetQRCodeByProduct([FromRoute] Guid productId)
+        {
+            var qrCode = await _productService.GetQRCodeByProductAsync(productId);
+            return File(qrCode, "image/png");
+        }
+
+        [HttpPut("qrcode")]
+        public async Task<IActionResult> UpdateProductStockWithQRCode(UpdateProductStockWithQRCodeCommandRequest updateProductStockWithQRCodeCommandRequest)
+        {
+            var response = await _mediator.Send(updateProductStockWithQRCodeCommandRequest);
             return Ok(response);
         }
 
