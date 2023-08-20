@@ -3,6 +3,7 @@ using ECommerce.Application.CustomAttributes;
 using ECommerce.Application.Features.Commands.Product.CreateProduct;
 using ECommerce.Application.Features.Commands.Product.RemoveProduct;
 using ECommerce.Application.Features.Commands.Product.UpdateProduct;
+using ECommerce.Application.Features.Commands.Product.UpdateProductStockWithQRCode;
 using ECommerce.Application.Features.Commands.ProductImageFile.ChangeShowcaseImage;
 using ECommerce.Application.Features.Commands.ProductImageFile.RemoveProductImage;
 using ECommerce.Application.Features.Commands.ProductImageFile.UploadProductImage;
@@ -49,6 +50,13 @@ namespace ECommerce.API.Controllers
         {
             var qrCode = await _productService.GetQRCodeByProductAsync(productId);
             return File(qrCode, "image/png");
+        }
+
+        [HttpPut("qrcode")]
+        public async Task<IActionResult> UpdateProductStockWithQRCode(UpdateProductStockWithQRCodeCommandRequest updateProductStockWithQRCodeCommandRequest)
+        {
+            var response = await _mediator.Send(updateProductStockWithQRCodeCommandRequest);
+            return Ok(response);
         }
 
         [HttpPost]
