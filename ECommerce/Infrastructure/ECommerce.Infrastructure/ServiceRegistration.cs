@@ -16,6 +16,7 @@ namespace ECommerce.Infrastructure
             services.AddScoped<ITokenHandler, TokenHandler>();
             services.AddScoped<IMailService, MailService>();
             services.AddScoped<IApplicationConfigurationService, ApplicationConfigurationService>();
+            services.AddScoped<IQRCodeService, QRCodeService>();
         }
 
         public static void AddStorage<T>(this IServiceCollection serviceCollection) where T : Storage, IStorage
